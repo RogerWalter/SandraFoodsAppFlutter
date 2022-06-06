@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>688933328433-6ocs4rj8ms95v8jkp51ssmo4u76g151o.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.688933328433-6ocs4rj8ms95v8jkp51ssmo4u76g151o</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>688933328433-75b59kmp9ulen2ucfvp0uml0c8c7k53f.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBnY3l5XVFYglKWFtC_GiLUiksTvv5P3co</string>
+	<key>GCM_SENDER_ID</key>
+	<string>688933328433</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ssoft.sandraFoodsApp</string>
+	<key>PROJECT_ID</key>
+	<string>sandra-foods-34d79</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sandra-foods-34d79.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:688933328433:ios:8da1904881cb5fdfe26710</string>
+	<key>DATABASE_URL</key>
+	<string>https://sandra-foods-34d79-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
