@@ -10,15 +10,14 @@ import 'package:sandra_foods_app/telas/Fechado.dart';
 import 'package:sandra_foods_app/telas/Identificacao.dart';
 import 'package:sandra_foods_app/telas/SemConexao.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ntp/ntp.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:io';
+import 'package:time_machine/time_machine.dart';
 
 void main() async {
 
   //Inicializar o Firebase
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Splash(),
@@ -82,13 +81,13 @@ class _SplashState extends State<Splash>
           _opacidade = 0;
           Future.delayed(Duration(seconds: 1)).then((value) => setState(()
           {
-            /*Navigator.push(
+            //_verificarConexao();
+            Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => Identificacao()
+                    builder: (context) => BemVindo("")
                 )
-            );*/
-            _verificarConexao();
+            );
           }));
         }));
       }));
@@ -98,23 +97,40 @@ class _SplashState extends State<Splash>
 
   _verificarConexao() async
   {
-    try {
-      final result = await InternetAddress.lookup('example.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        _horario();
+    try{
+      if(Platform.isAndroid || Platform.isIOS){
+        try {
+          final result = await InternetAddress.lookup('example.com');
+          if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+            _horario();
+          }
+        } on SocketException catch (_) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SemConexao()
+              )
+          );
+        }
       }
-    } on SocketException catch (_) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => SemConexao()
-          )
-      );
+    } catch(e){
+      _horario();
     }
   }
 
   _recuperar(int _abertoOuFechado) async
   {
+    //excluir após os teste
+
+
+
+
+    _abertoOuFechado = 1;
+
+
+
+
+    //excluir após os teste
     final prefs = await SharedPreferences.getInstance();
     if(prefs.getString("nome") != null && prefs.getString("nome") != "")
     {
@@ -225,8 +241,13 @@ class _SplashState extends State<Splash>
 
   _horario() async
   {
+    await Firebase.initializeApp();
+    await TimeMachine.initialize( { 'rootBundle': rootBundle, });
+    var tzdb = await DateTimeZoneProviders.tzdb;
+    var local = await tzdb["America/Sao_Paulo"];
     DateTime _myTime;
-    _myTime = await NTP.now();
+    var now = Instant.now();
+    _myTime = now.inZone(local).toDateTimeLocal();
     hoje = _myTime;
     var horaFormato = new DateFormat('HH:mm:ss');
     String horaAtual = horaFormato.format(_myTime);
