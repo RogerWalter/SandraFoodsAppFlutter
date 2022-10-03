@@ -1,6 +1,3 @@
-import 'dart:io';
-//import 'dart:js' as js;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +7,6 @@ import 'package:sandra_foods_app/telas/Principal.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../util/Helper.dart';
 
 void main() {
@@ -46,15 +41,11 @@ class _IdentificacaoState extends State<Identificacao>
   double _opacidadeEmoji = 0;
   Color _color = Colors.white;
   String _textBotao = "Quero ser feliz!";
-
   double _opacidadeLogo = 1;
   Alignment _alinhamento = Alignment.bottomCenter;
   bool _visibility = true;
-
-  double padding = 4;
-
+  double padding = 8;
   double raioBotao = 25;
-
   Curve curvaAplicada = Curves.slowMiddle;
   Curve curvaOpacidade = Curves.slowMiddle;
 
@@ -241,12 +232,13 @@ class _IdentificacaoState extends State<Identificacao>
                                       style: TextStyle(
                                         color: corMarromSF,
                                         fontSize: 16,
+                                        fontWeight: FontWeight.bold
                                       ),
                                       decoration: InputDecoration(
                                         counterText: "",
                                         contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         labelText: "O nome dessa pessoa linda!",
-                                        labelStyle: TextStyle(color: corMarromSF),
+                                        labelStyle: TextStyle(color: corMarromSF, fontWeight: FontWeight.normal),
                                         fillColor: Colors.white,
                                         hoverColor: corLaranjaSF,
                                         enabledBorder: OutlineInputBorder(
@@ -308,13 +300,13 @@ class _IdentificacaoState extends State<Identificacao>
                                       style: TextStyle(
                                         color: corMarromSF,
                                         fontSize: 16,
-
+                                        fontWeight: FontWeight.bold
                                       ),
                                       decoration: InputDecoration(
                                         counterText: "",
                                         contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         labelText: "O celular dessa pessoa linda!",
-                                        labelStyle: TextStyle(color: corMarromSF),
+                                        labelStyle: TextStyle(color: corMarromSF, fontWeight: FontWeight.normal),
                                         fillColor: Colors.white,
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: const BorderSide(width: 2, color: corLaranjaSF),
@@ -373,7 +365,7 @@ class _IdentificacaoState extends State<Identificacao>
                         AnimatedAlign(
                           alignment: _alinhamento,
                           duration: Duration(seconds: 1),
-                          curve: Curves.elasticInOut,
+                          curve: Curves.easeInOutExpo,
                           child: AnimatedContainer(
                             margin: EdgeInsets.all(padding),
                             duration: Duration(seconds: 1),
@@ -395,11 +387,11 @@ class _IdentificacaoState extends State<Identificacao>
 
                                       Future.delayed(Duration(seconds: 1)).then((value) => setState(() {
                                         _opacidadeLogo = 0;
-                                        padding = 0;
                                         curvaAplicada = Curves.fastOutSlowIn;
                                         Future.delayed(Duration(seconds: 1)).then((value) => setState(() {
                                           _visibility = false;
                                           _alinhamento = Alignment.center;
+                                          padding = 0;
                                           Future.delayed(Duration(seconds: 1)).then((value) => setState(() {
                                             _widthBotao = 2000;
                                             _heightBotao = 3000;

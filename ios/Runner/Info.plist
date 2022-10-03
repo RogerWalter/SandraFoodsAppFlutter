@@ -50,5 +50,9 @@
       <string>https</string>
       <string>http</string>
     </array>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>${PRODUCT_NAME} WhenInUse Location</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>${PRODUCT_NAME} Use location always</string>
 </dict>
 </plist>
