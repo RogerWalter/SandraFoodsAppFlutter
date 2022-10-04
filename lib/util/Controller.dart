@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:sandra_foods_app/model/Cliente.dart';
 import 'package:sandra_foods_app/telas/SemConexao.dart';
 
+import '../model/ItemCardapio.dart';
 import '../model/Taxa.dart';
 part 'Controller.g.dart';
 
@@ -125,5 +126,21 @@ abstract class ControllerBase with Store{
       list_bairros.add(lista_taxas[i].bairro);
     }
     lista_bairros_dados = list_bairros;
+  }
+
+  //ABA CARDAPIO
+
+  @observable
+  List<ItemCardapio> lista_itens_cardapio = [];
+  @observable
+  List<ItemCardapio> lista_adicionais_cardapio = [];
+
+  preenche_listas_cardapio() async{
+    ItemCardapio itemCardapio = ItemCardapio();
+    lista_itens_cardapio.clear();
+    lista_adicionais_cardapio.clear();
+    var retorno = await itemCardapio.recuperar_itens_cardapio();
+    lista_itens_cardapio = retorno[0];
+    lista_adicionais_cardapio = retorno[1];
   }
 }

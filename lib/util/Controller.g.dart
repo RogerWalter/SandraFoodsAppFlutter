@@ -242,6 +242,40 @@ mixin _$Controller on ControllerBase, Store {
     });
   }
 
+  late final _$lista_itens_cardapioAtom =
+      Atom(name: 'ControllerBase.lista_itens_cardapio', context: context);
+
+  @override
+  List<ItemCardapio> get lista_itens_cardapio {
+    _$lista_itens_cardapioAtom.reportRead();
+    return super.lista_itens_cardapio;
+  }
+
+  @override
+  set lista_itens_cardapio(List<ItemCardapio> value) {
+    _$lista_itens_cardapioAtom.reportWrite(value, super.lista_itens_cardapio,
+        () {
+      super.lista_itens_cardapio = value;
+    });
+  }
+
+  late final _$lista_adicionais_cardapioAtom =
+      Atom(name: 'ControllerBase.lista_adicionais_cardapio', context: context);
+
+  @override
+  List<ItemCardapio> get lista_adicionais_cardapio {
+    _$lista_adicionais_cardapioAtom.reportRead();
+    return super.lista_adicionais_cardapio;
+  }
+
+  @override
+  set lista_adicionais_cardapio(List<ItemCardapio> value) {
+    _$lista_adicionais_cardapioAtom
+        .reportWrite(value, super.lista_adicionais_cardapio, () {
+      super.lista_adicionais_cardapio = value;
+    });
+  }
+
   late final _$salvar_dados_clienteAsyncAction =
       AsyncAction('ControllerBase.salvar_dados_cliente', context: context);
 
@@ -312,7 +346,9 @@ rua_dados: ${rua_dados},
 num_dados: ${num_dados},
 bairro_dados: ${bairro_dados},
 parametro_dados_endereco: ${parametro_dados_endereco},
-lista_bairros_dados: ${lista_bairros_dados}
+lista_bairros_dados: ${lista_bairros_dados},
+lista_itens_cardapio: ${lista_itens_cardapio},
+lista_adicionais_cardapio: ${lista_adicionais_cardapio}
     ''';
   }
 }

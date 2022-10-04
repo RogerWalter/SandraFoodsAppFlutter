@@ -126,7 +126,6 @@ class Helper{
     final startIndex_num = data.address.indexOf(start_num);
     final endIndex_num = data.address.indexOf(end_num, startIndex_num + start_num.length);
     String numero = data.address.substring(startIndex_num + start_num.length, endIndex_num);
-    print("Rua: " + rua + " - Numero: " + numero + " - Bairro: " + bairro);
     return [rua, numero, bairro];
   }
 }

@@ -222,6 +222,7 @@ class _IdentificacaoState extends State<Identificacao>
                                   child:Container(
                                     margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
                                     child: TextField(
+                                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[a-zA-Z -]"))],
                                       controller: _controllerNome,
                                       focusNode: focoNome,
                                       keyboardType: TextInputType.name,

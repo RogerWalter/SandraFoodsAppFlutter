@@ -1,17 +1,11 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:location/location.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:sandra_foods_app/model/Cliente.dart';
-import 'package:sandra_foods_app/model/Taxa.dart';
 import 'package:sandra_foods_app/util/Controller.dart';
 import 'package:sandra_foods_app/util/Helper.dart';
-
-import '../util/Loading.dart';
 
 const corLaranjaSF = const Color(0xffff6900);
 const corMarromSF = const Color(0xff3d2314);
@@ -204,6 +198,7 @@ class _DadosState extends State<Dados> {
                                               height: 0.1,
                                             ),
                                           ),
+                                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[a-zA-Z -]"))],
                                           validator: (String? value){
                                             if(value?.length == 0 || value!.isEmpty || value == ""){
                                               return "Informe seu nome";
@@ -625,7 +620,7 @@ class _DadosState extends State<Dados> {
                                           child: Stack(
                                             children: <Widget>[
                                               Padding(
-                                                padding: EdgeInsets.all(4),
+                                                padding: EdgeInsets.all(0),
                                                 child: Observer(
                                                   builder: (_){
                                                     return AnimatedOpacity(
@@ -647,7 +642,7 @@ class _DadosState extends State<Dados> {
                                                 ),
                                               ),
                                               Padding(
-                                                padding: EdgeInsets.all(4),
+                                                padding: EdgeInsets.all(0),
                                                 child: Align(
                                                     alignment: Alignment.center,
                                                     child: Observer(
@@ -657,8 +652,8 @@ class _DadosState extends State<Dados> {
                                                             opacity: controller_mobx.opacidade_progress_preencher_dados,
                                                             curve: Curves.linear,
                                                             child: SizedBox(
-                                                              height: 32,
-                                                              width: 32,
+                                                              height: 20,
+                                                              width: 20,
                                                               child: CircularProgressIndicator(
                                                                 color: corMarromSF,
                                                               )
@@ -669,23 +664,25 @@ class _DadosState extends State<Dados> {
                                                     )
                                                 ),
                                               ),
-                                              Align(
-                                                  alignment: Alignment.center,
-                                                  child: Observer(
-                                                    builder: (_){
-                                                      return AnimatedOpacity(
-                                                          duration: Duration(milliseconds: 1),
-                                                          opacity: controller_mobx.opacidade_icone_preencher_dados,
-                                                          curve: Curves.linear,
+                                              Padding(
+                                                padding: EdgeInsets.all(0),
+                                                child: Observer(
+                                                  builder: (_){
+                                                    return AnimatedOpacity(
+                                                        duration: Duration(milliseconds: 1),
+                                                        opacity: controller_mobx.opacidade_icone_preencher_dados,
+                                                        curve: Curves.linear,
+                                                        child: Center(
                                                           child: Icon(Icons.emoji_emotions,
                                                             color: corMarromSF,
-                                                            size: 32,
+                                                            size: 24,
                                                           )
-                                                        //child: Icon(Icons.emoji_emotions_outlined, color: Colors.white)
-                                                      );
-                                                    },
-                                                  )
-                                              ),
+                                                        )
+                                                      //child: Icon(Icons.emoji_emotions_outlined, color: Colors.white)
+                                                    );
+                                                  },
+                                                ),
+                                              )
                                             ],
                                           )
                                       );
