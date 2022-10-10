@@ -276,6 +276,104 @@ mixin _$Controller on ControllerBase, Store {
     });
   }
 
+  late final _$lista_filtroAtom =
+      Atom(name: 'ControllerBase.lista_filtro', context: context);
+
+  @override
+  List<Filtro> get lista_filtro {
+    _$lista_filtroAtom.reportRead();
+    return super.lista_filtro;
+  }
+
+  @override
+  set lista_filtro(List<Filtro> value) {
+    _$lista_filtroAtom.reportWrite(value, super.lista_filtro, () {
+      super.lista_filtro = value;
+    });
+  }
+
+  late final _$icone_filtro_cardapioAtom =
+      Atom(name: 'ControllerBase.icone_filtro_cardapio', context: context);
+
+  @override
+  bool get icone_filtro_cardapio {
+    _$icone_filtro_cardapioAtom.reportRead();
+    return super.icone_filtro_cardapio;
+  }
+
+  @override
+  set icone_filtro_cardapio(bool value) {
+    _$icone_filtro_cardapioAtom.reportWrite(value, super.icone_filtro_cardapio,
+        () {
+      super.icone_filtro_cardapio = value;
+    });
+  }
+
+  late final _$controller_slideAtom =
+      Atom(name: 'ControllerBase.controller_slide', context: context);
+
+  @override
+  AnimationController? get controller_slide {
+    _$controller_slideAtom.reportRead();
+    return super.controller_slide;
+  }
+
+  @override
+  set controller_slide(AnimationController? value) {
+    _$controller_slideAtom.reportWrite(value, super.controller_slide, () {
+      super.controller_slide = value;
+    });
+  }
+
+  late final _$controller_sizeAtom =
+      Atom(name: 'ControllerBase.controller_size', context: context);
+
+  @override
+  AnimationController? get controller_size {
+    _$controller_sizeAtom.reportRead();
+    return super.controller_size;
+  }
+
+  @override
+  set controller_size(AnimationController? value) {
+    _$controller_sizeAtom.reportWrite(value, super.controller_size, () {
+      super.controller_size = value;
+    });
+  }
+
+  late final _$offsetAnimation_slideAtom =
+      Atom(name: 'ControllerBase.offsetAnimation_slide', context: context);
+
+  @override
+  Animation<Offset>? get offsetAnimation_slide {
+    _$offsetAnimation_slideAtom.reportRead();
+    return super.offsetAnimation_slide;
+  }
+
+  @override
+  set offsetAnimation_slide(Animation<Offset>? value) {
+    _$offsetAnimation_slideAtom.reportWrite(value, super.offsetAnimation_slide,
+        () {
+      super.offsetAnimation_slide = value;
+    });
+  }
+
+  late final _$animation_sizeAtom =
+      Atom(name: 'ControllerBase.animation_size', context: context);
+
+  @override
+  Animation<double>? get animation_size {
+    _$animation_sizeAtom.reportRead();
+    return super.animation_size;
+  }
+
+  @override
+  set animation_size(Animation<double>? value) {
+    _$animation_sizeAtom.reportWrite(value, super.animation_size, () {
+      super.animation_size = value;
+    });
+  }
+
   late final _$salvar_dados_clienteAsyncAction =
       AsyncAction('ControllerBase.salvar_dados_cliente', context: context);
 
@@ -300,9 +398,27 @@ mixin _$Controller on ControllerBase, Store {
       context: context);
 
   @override
-  Future preenche_bairros_dropdown_dados(BuildContext context) {
+  Future preenche_bairros_dropdown_dados() {
     return _$preenche_bairros_dropdown_dadosAsyncAction
-        .run(() => super.preenche_bairros_dropdown_dados(context));
+        .run(() => super.preenche_bairros_dropdown_dados());
+  }
+
+  late final _$preenche_listas_cardapioAsyncAction =
+      AsyncAction('ControllerBase.preenche_listas_cardapio', context: context);
+
+  @override
+  Future preenche_listas_cardapio() {
+    return _$preenche_listas_cardapioAsyncAction
+        .run(() => super.preenche_listas_cardapio());
+  }
+
+  late final _$preenche_lista_filtroAsyncAction =
+      AsyncAction('ControllerBase.preenche_lista_filtro', context: context);
+
+  @override
+  Future preenche_lista_filtro() {
+    return _$preenche_lista_filtroAsyncAction
+        .run(() => super.preenche_lista_filtro());
   }
 
   late final _$ControllerBaseActionController =
@@ -331,6 +447,28 @@ mixin _$Controller on ControllerBase, Store {
   }
 
   @override
+  dynamic altera_icone_filtro_cardapio() {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.altera_icone_filtro_cardapio');
+    try {
+      return super.altera_icone_filtro_cardapio();
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic criar_animation_controller_filtro(TickerProvider vsync_mx) {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.criar_animation_controller_filtro');
+    try {
+      return super.criar_animation_controller_filtro(vsync_mx);
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 escala_imagem_dados: ${escala_imagem_dados},
@@ -348,7 +486,13 @@ bairro_dados: ${bairro_dados},
 parametro_dados_endereco: ${parametro_dados_endereco},
 lista_bairros_dados: ${lista_bairros_dados},
 lista_itens_cardapio: ${lista_itens_cardapio},
-lista_adicionais_cardapio: ${lista_adicionais_cardapio}
+lista_adicionais_cardapio: ${lista_adicionais_cardapio},
+lista_filtro: ${lista_filtro},
+icone_filtro_cardapio: ${icone_filtro_cardapio},
+controller_slide: ${controller_slide},
+controller_size: ${controller_size},
+offsetAnimation_slide: ${offsetAnimation_slide},
+animation_size: ${animation_size}
     ''';
   }
 }

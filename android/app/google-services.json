@@ -30,6 +30,13 @@
             {
               "client_id": "419525370744-cfolj12v9i4mo51cdg79mcslni24u868.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "419525370744-u832dbdk6gig5inseua8680kf3dc85ni.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ssoft.sandraFoodsApp"
+              }
             }
           ]
         }

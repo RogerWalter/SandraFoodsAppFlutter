@@ -11,7 +11,7 @@ extension CapExtension on String {
 class Taxa{
   int _id = 0;
   String _bairro = "";
-  double _valor = 0.0;
+  num _valor = 0.0;
 
   Taxa();
 
@@ -31,9 +31,9 @@ class Taxa{
     return data;
   }
 
-  double get valor => _valor;
+  num get valor => _valor;
 
-  set valor(double value) {
+  set valor(num value) {
     _valor = value;
   }
 
@@ -49,7 +49,8 @@ class Taxa{
     _id = value;
   }
 
-  recuperar_taxas_firebase(BuildContext context) async{
+  recuperar_taxas_firebase() async{
+    await Firebase.initializeApp();
     List<Taxa> lista_taxas = [];
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref.child("taxa").get();

@@ -70,7 +70,7 @@ class _DadosState extends State<Dados> {
   @override
   Widget build(BuildContext context) {
     Future<String> waitRetornoCliente() async{
-      await controller_mobx.preenche_bairros_dropdown_dados(context);
+      await controller_mobx.preenche_bairros_dropdown_dados();
       await preenche_dados_cliente();
       //await Future.delayed(Duration(seconds: 3));
       return "Carregado";

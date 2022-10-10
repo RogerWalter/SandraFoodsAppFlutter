@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
+import 'package:sandra_foods_app/abas/Cardapio.dart';
 import 'package:sandra_foods_app/model/Cliente.dart';
 import 'package:sandra_foods_app/telas/SemConexao.dart';
 
+import '../model/Filtro.dart';
 import '../model/ItemCardapio.dart';
 import '../model/Taxa.dart';
 part 'Controller.g.dart';
@@ -14,6 +17,7 @@ const corPastelSF = const Color(0xfffafcc2);
 class Controller = ControllerBase with _$Controller;
 
 abstract class ControllerBase with Store{
+
   //ABA DADOS
   @observable
   double escala_imagem_dados = 0.8;
@@ -116,12 +120,12 @@ abstract class ControllerBase with Store{
   List<String> lista_bairros_dados = [""];
 
   @action
-  preenche_bairros_dropdown_dados(BuildContext context) async{
+  preenche_bairros_dropdown_dados() async{
     Taxa taxa = Taxa();
     List<Taxa> lista_taxas = [];
     List<String> list_bairros = [""];
     lista_bairros_dados.clear();
-    lista_taxas = await taxa.recuperar_taxas_firebase(context);
+    lista_taxas = await taxa.recuperar_taxas_firebase();
     for(int i = 0; i < lista_taxas.length; i++){
       list_bairros.add(lista_taxas[i].bairro);
     }
@@ -135,6 +139,7 @@ abstract class ControllerBase with Store{
   @observable
   List<ItemCardapio> lista_adicionais_cardapio = [];
 
+  @action
   preenche_listas_cardapio() async{
     ItemCardapio itemCardapio = ItemCardapio();
     lista_itens_cardapio.clear();
@@ -143,4 +148,64 @@ abstract class ControllerBase with Store{
     lista_itens_cardapio = retorno[0];
     lista_adicionais_cardapio = retorno[1];
   }
+
+  @observable
+  List<Filtro> lista_filtro = [];
+
+  @action
+  preenche_lista_filtro() async{
+    Filtro filtro = Filtro();
+    lista_filtro.clear();
+    var retorno = await filtro.recuperar_filtros_firebase();
+    lista_filtro = retorno;
+  }
+
+  @observable
+  bool icone_filtro_cardapio = false; //não pressionado = false | pressionado = true
+
+  @action
+  altera_icone_filtro_cardapio(){
+    icone_filtro_cardapio = icone_filtro_cardapio == true ? false : true;
+    if(icone_filtro_cardapio == true){
+      controller_slide!.forward(from: 0);
+      controller_size!.forward(from: 0);
+    }
+    else{
+      controller_slide!.reverse();
+      controller_size!.reverse();
+    }
+  }
+  @observable
+  AnimationController? controller_slide;
+  @observable
+  AnimationController? controller_size;
+  @observable
+  Animation<Offset>? offsetAnimation_slide;
+  @observable
+  Animation<double>? animation_size;
+
+  @action
+  criar_animation_controller_filtro(TickerProvider vsync_mx){
+    controller_slide = AnimationController(
+        duration: const Duration(milliseconds: 500),
+    vsync: vsync_mx);
+
+    controller_size = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: vsync_mx,);
+
+    offsetAnimation_slide = Tween<Offset>(
+      begin: Offset(0.0, -2.0),
+      end: Offset(0.0, 0.0),
+    ).animate(CurvedAnimation(
+      parent: controller_slide!,
+      curve: Curves.easeInOutQuint,
+    ));
+
+    animation_size = CurvedAnimation(
+      parent: controller_size!,
+      curve: Curves.fastOutSlowIn,
+    );
+  }
 }
+

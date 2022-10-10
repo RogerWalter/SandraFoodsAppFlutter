@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:sandra_foods_app/telas/Principal.dart';
 import 'package:sandra_foods_app/util/FirebaseUtil.dart';
 import 'package:sandra_foods_app/util/Helper.dart';
 import '../telas/BemVindo.dart';
 import '../firebase_options.dart';
+import '../util/Controller.dart';
 import 'SemConexao.dart';
 
 void main() async {
@@ -19,10 +21,19 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: Splash(),
-  ));
+  runApp(
+      MultiProvider(
+        providers: [
+          Provider<Controller>(
+            create: (_) => Controller(),
+          )
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Splash(),
+        ),
+      )
+  );
 }
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -43,6 +54,8 @@ class _SplashState extends State<Splash>
   Curve _curvaopacidade = Curves.easeOutExpo;
   Duration _duracaoopacidade = Duration(seconds: 1);
 
+  Controller controller_mobx = Controller();
+
   late AnimationController _controllerAnimacao = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this
@@ -52,6 +65,13 @@ class _SplashState extends State<Splash>
       parent: _controllerAnimacao,
       curve: Curves.easeInOutQuint
   );
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    controller_mobx = Provider.of(context);
+  }
 
   @override
   void initState() {
@@ -66,6 +86,7 @@ class _SplashState extends State<Splash>
         _tamanho = 200;
         _curvaopacidade = Curves.easeOutCirc;
         _duracaoopacidade = Duration(milliseconds: 250);
+        recupera_dados_app();
         Future.delayed(Duration(seconds: 1)).then((value) => setState(()
         {
           _alinhamento = Alignment.topCenter;
@@ -127,5 +148,9 @@ class _SplashState extends State<Splash>
         ),
       )
     );
+  }
+  recupera_dados_app() async{
+    await controller_mobx.preenche_listas_cardapio();
+    await controller_mobx.preenche_lista_filtro();
   }
 }

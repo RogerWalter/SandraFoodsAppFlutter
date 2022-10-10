@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class ItemCardapio{
@@ -69,6 +70,7 @@ class ItemCardapio{
   }
 
   recuperar_itens_cardapio() async{
+    await Firebase.initializeApp();
     List<ItemCardapio> _listaItens = [];
     List<ItemCardapio> _listaAdicionais = [];
     final ref = FirebaseDatabase.instance.ref();

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:js' as js;
+//import 'dart:js' as js;
 import 'package:flutter/material.dart';
 import 'package:sandra_foods_app/abas/Dados.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,7 +18,7 @@ class Helper{
         if (!await launchUrl(_url)) throw 'Erro ao abrir o WhatsApp: $_url';
       }
     } catch(e){
-      js.context.callMethod('open', [_url_web]);
+      //js.context.callMethod('open', [_url_web]);
     }
   }
 
