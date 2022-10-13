@@ -137,6 +137,8 @@ abstract class ControllerBase with Store{
   @observable
   List<ItemCardapio> lista_itens_cardapio = [];
   @observable
+  List<ItemCardapio> lista_itens_cardapio_mostrar = [];
+  @observable
   List<ItemCardapio> lista_adicionais_cardapio = [];
 
   @action
@@ -147,6 +149,7 @@ abstract class ControllerBase with Store{
     var retorno = await itemCardapio.recuperar_itens_cardapio();
     lista_itens_cardapio = retorno[0];
     lista_adicionais_cardapio = retorno[1];
+    lista_itens_cardapio_mostrar = lista_itens_cardapio;
   }
 
   @observable
@@ -171,6 +174,7 @@ abstract class ControllerBase with Store{
       controller_size!.forward(from: 0);
     }
     else{
+      limpa_filtro_aplicado();
       controller_slide!.reverse();
       controller_size!.reverse();
     }
@@ -207,5 +211,38 @@ abstract class ControllerBase with Store{
       curve: Curves.fastOutSlowIn,
     );
   }
+
+  @observable
+  Filtro filtro_aplicado_valor = Filtro();
+  @observable
+  List<ItemCardapio> lista_itens_filtrada = [];
+
+  @action
+  preenche_lista_itens_filtrada(Filtro filtro) {
+    ItemCardapio item = ItemCardapio();
+    filtro_aplicado_valor = filtro;
+    lista_itens_filtrada.clear();
+    for(int i=0; i < lista_itens_cardapio.length; i++){
+      item = lista_itens_cardapio[i];
+      if(item.grupo == filtro.grupo && item.tipo == filtro.tipo){
+        lista_itens_filtrada.add(item);
+      }
+    }
+    lista_itens_cardapio_mostrar = lista_itens_filtrada;
+  }
+
+  @action
+  limpa_filtro_aplicado(){
+    icone_filtro_cardapio = false;
+    lista_itens_cardapio_mostrar = lista_itens_cardapio;
+    lista_itens_filtrada.clear();
+    filtro_aplicado_valor = Filtro();
+  }
+
+  @action
+  limpa_filtro_valor_aplicado(){
+    filtro_aplicado_valor = Filtro();
+  }
+
 }
 

@@ -152,5 +152,6 @@ class _SplashState extends State<Splash>
   recupera_dados_app() async{
     await controller_mobx.preenche_listas_cardapio();
     await controller_mobx.preenche_lista_filtro();
+    await controller_mobx.preenche_bairros_dropdown_dados();
   }
 }

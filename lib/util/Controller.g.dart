@@ -259,6 +259,23 @@ mixin _$Controller on ControllerBase, Store {
     });
   }
 
+  late final _$lista_itens_cardapio_mostrarAtom = Atom(
+      name: 'ControllerBase.lista_itens_cardapio_mostrar', context: context);
+
+  @override
+  List<ItemCardapio> get lista_itens_cardapio_mostrar {
+    _$lista_itens_cardapio_mostrarAtom.reportRead();
+    return super.lista_itens_cardapio_mostrar;
+  }
+
+  @override
+  set lista_itens_cardapio_mostrar(List<ItemCardapio> value) {
+    _$lista_itens_cardapio_mostrarAtom
+        .reportWrite(value, super.lista_itens_cardapio_mostrar, () {
+      super.lista_itens_cardapio_mostrar = value;
+    });
+  }
+
   late final _$lista_adicionais_cardapioAtom =
       Atom(name: 'ControllerBase.lista_adicionais_cardapio', context: context);
 
@@ -374,6 +391,40 @@ mixin _$Controller on ControllerBase, Store {
     });
   }
 
+  late final _$filtro_aplicado_valorAtom =
+      Atom(name: 'ControllerBase.filtro_aplicado_valor', context: context);
+
+  @override
+  Filtro get filtro_aplicado_valor {
+    _$filtro_aplicado_valorAtom.reportRead();
+    return super.filtro_aplicado_valor;
+  }
+
+  @override
+  set filtro_aplicado_valor(Filtro value) {
+    _$filtro_aplicado_valorAtom.reportWrite(value, super.filtro_aplicado_valor,
+        () {
+      super.filtro_aplicado_valor = value;
+    });
+  }
+
+  late final _$lista_itens_filtradaAtom =
+      Atom(name: 'ControllerBase.lista_itens_filtrada', context: context);
+
+  @override
+  List<ItemCardapio> get lista_itens_filtrada {
+    _$lista_itens_filtradaAtom.reportRead();
+    return super.lista_itens_filtrada;
+  }
+
+  @override
+  set lista_itens_filtrada(List<ItemCardapio> value) {
+    _$lista_itens_filtradaAtom.reportWrite(value, super.lista_itens_filtrada,
+        () {
+      super.lista_itens_filtrada = value;
+    });
+  }
+
   late final _$salvar_dados_clienteAsyncAction =
       AsyncAction('ControllerBase.salvar_dados_cliente', context: context);
 
@@ -469,6 +520,39 @@ mixin _$Controller on ControllerBase, Store {
   }
 
   @override
+  dynamic preenche_lista_itens_filtrada(Filtro filtro) {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.preenche_lista_itens_filtrada');
+    try {
+      return super.preenche_lista_itens_filtrada(filtro);
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limpa_filtro_aplicado() {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.limpa_filtro_aplicado');
+    try {
+      return super.limpa_filtro_aplicado();
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limpa_filtro_valor_aplicado() {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.limpa_filtro_valor_aplicado');
+    try {
+      return super.limpa_filtro_valor_aplicado();
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 escala_imagem_dados: ${escala_imagem_dados},
@@ -486,13 +570,16 @@ bairro_dados: ${bairro_dados},
 parametro_dados_endereco: ${parametro_dados_endereco},
 lista_bairros_dados: ${lista_bairros_dados},
 lista_itens_cardapio: ${lista_itens_cardapio},
+lista_itens_cardapio_mostrar: ${lista_itens_cardapio_mostrar},
 lista_adicionais_cardapio: ${lista_adicionais_cardapio},
 lista_filtro: ${lista_filtro},
 icone_filtro_cardapio: ${icone_filtro_cardapio},
 controller_slide: ${controller_slide},
 controller_size: ${controller_size},
 offsetAnimation_slide: ${offsetAnimation_slide},
-animation_size: ${animation_size}
+animation_size: ${animation_size},
+filtro_aplicado_valor: ${filtro_aplicado_valor},
+lista_itens_filtrada: ${lista_itens_filtrada}
     ''';
   }
 }

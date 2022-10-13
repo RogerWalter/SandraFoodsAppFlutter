@@ -6,6 +6,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:sandra_foods_app/model/Cliente.dart';
 import 'package:sandra_foods_app/util/Controller.dart';
 import 'package:sandra_foods_app/util/Helper.dart';
+import 'package:provider/provider.dart';
 
 const corLaranjaSF = const Color(0xffff6900);
 const corMarromSF = const Color(0xff3d2314);
@@ -61,6 +62,14 @@ class _DadosState extends State<Dados> {
 
   var lista_bairros = [""];
 
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    controller_mobx = Provider.of(context);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -70,10 +79,13 @@ class _DadosState extends State<Dados> {
   @override
   Widget build(BuildContext context) {
     Future<String> waitRetornoCliente() async{
-      await controller_mobx.preenche_bairros_dropdown_dados();
-      await preenche_dados_cliente();
-      //await Future.delayed(Duration(seconds: 3));
-      return "Carregado";
+      if(controller_mobx.lista_bairros_dados.length > 0){
+        await preenche_dados_cliente();
+        return "Carregado";
+      }
+      else{
+        return "Vazio";
+      }
     }
     double largura = MediaQuery.of(context).size.width - 24;
     double altura = MediaQuery.of(context).size.height/6;

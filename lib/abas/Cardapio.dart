@@ -7,7 +7,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:sandra_foods_app/util/Design.dart';
 import 'dart:ui' as ui;
+import '../model/Filtro.dart';
+import '../telas/AdicionarItem.dart';
 import '../util/Controller.dart';
 
 
@@ -21,6 +24,8 @@ class Cardapio extends StatefulWidget {
 class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
 
   Controller controller_mobx = Controller();
+  Design design = Design();
+  ScrollController _scrollController = ScrollController();
 
   @override
   void didChangeDependencies() {
@@ -33,6 +38,7 @@ class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
   void initState() {
     // TODO: implement initState
     super.initState();
+    controller_mobx.limpa_filtro_aplicado();
   }
 
 
@@ -50,10 +56,11 @@ class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
       }
       return "Vazio";
     }
-
+    controller_mobx.limpa_filtro_aplicado();
+    //controller_mobx.icone_filtro_cardapio = false;
     double largura = MediaQuery.of(context).size.width - 16;
     double altura = MediaQuery.of(context).size.height/5 - 16;
-    print(altura.toString());
+
     return FutureBuilder<String>(
         future: waitLoadCardapio(),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot){
@@ -80,6 +87,12 @@ class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
                             icon: (controller_mobx.icone_filtro_cardapio == false) ? Icon(Icons.filter_alt, color: Colors.white,) : Icon(Icons.filter_alt_off, color: Colors.white),
                             tooltip: (controller_mobx.icone_filtro_cardapio == false) ? "Mostrar Filtro" : "Esconder Filtro" ,
                             onPressed: () {
+                              _scrollController.animateTo(
+                                _scrollController.position.minScrollExtent,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.ease,
+                              );
+                              //controller_mobx.limpa_filtro_aplicado();
                               controller_mobx.altera_icone_filtro_cardapio();
                             },
                           )
@@ -119,19 +132,31 @@ class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
                                             mainAxisSpacing: 4,
                                             crossAxisSpacing: 4,
                                             children: List.generate(controller_mobx.lista_filtro.length, (index) {
-
-                                              TextStyle _style_filtro_item = TextStyle(color: corLaranjaSF, fontSize: (12), fontWeight: FontWeight.bold);
-                                              String _text_filtro_item = controller_mobx.lista_filtro[index].descricao;
-                                              Size _size_filtro = _textSize(_text_filtro_item, _style_filtro_item);
-
                                               return Card(
-                                                  elevation: 4,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(15),
+                                                  ),
+                                                  elevation: (controller_mobx.lista_filtro[index].grupo == controller_mobx.filtro_aplicado_valor.grupo
+                                                           && controller_mobx.lista_filtro[index].tipo == controller_mobx.filtro_aplicado_valor.tipo) ? 0.5 : 4.0,
+                                                  shadowColor: corLaranjaSF,
                                                   child: Container(
+                                                      decoration: (controller_mobx.lista_filtro[index].grupo == controller_mobx.filtro_aplicado_valor.grupo
+                                                          && controller_mobx.lista_filtro[index].tipo == controller_mobx.filtro_aplicado_valor.tipo) ? design.container_grad_branco_laranja : design.container_transparente,
                                                       height: (altura*0.67) - 24,
                                                       width: 100,
                                                       child: InkWell(
+                                                        borderRadius: BorderRadius.circular(15),
                                                         splashColor: corLaranjaSF.withOpacity(0.20),
-                                                        onTap: (){},
+                                                        onTap: (){
+                                                          if(controller_mobx.lista_filtro[index].grupo == controller_mobx.filtro_aplicado_valor.grupo
+                                                          && controller_mobx.lista_filtro[index].tipo == controller_mobx.filtro_aplicado_valor.tipo){
+                                                            controller_mobx.lista_itens_cardapio_mostrar = controller_mobx.lista_itens_cardapio;
+                                                            controller_mobx.limpa_filtro_valor_aplicado();
+                                                          }
+                                                          else{
+                                                            controller_mobx.preenche_lista_itens_filtrada(controller_mobx.lista_filtro[index]);
+                                                          }
+                                                        },
                                                         child: Stack(
                                                             children: <Widget>[
                                                               Column(
@@ -184,9 +209,9 @@ class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
                                                                       child: Padding(
                                                                         padding: EdgeInsets.fromLTRB(4,2,4,4),
                                                                         child: AutoSizeText(
-                                                                          _text_filtro_item,
+                                                                          controller_mobx.lista_filtro[index].descricao,
                                                                           textAlign: TextAlign.center,
-                                                                          style: _style_filtro_item,
+                                                                          style: TextStyle(color: corMarromSF, fontSize: (12), fontWeight: FontWeight.bold),
                                                                           minFontSize: 10,
                                                                           maxLines: 2,
                                                                           overflow: TextOverflow.ellipsis,
@@ -216,121 +241,133 @@ class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
                             child: GlowingOverscrollIndicator(
                               axisDirection: AxisDirection.down,
                               color: corLaranjaSF.withOpacity(0.20),
-                              child:ListView.builder(
-                                itemCount: controller_mobx.lista_itens_cardapio.length,
-                                shrinkWrap: true,
-                                padding: EdgeInsets.all(8),
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (BuildContext, index){
+                              child: Observer(
+                                builder: (_){
+                                  return ListView.builder(
+                                    controller: _scrollController,
+                                    itemCount: controller_mobx.lista_itens_cardapio_mostrar.length,
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.all(8),
+                                    scrollDirection: Axis.vertical,
+                                    itemBuilder: (BuildContext, index){
 
-                                  TextStyle _style_nome_item = TextStyle(color: corMarromSF, fontSize: (20), fontWeight: FontWeight.bold);
-                                  String _text_nome_item = controller_mobx.lista_itens_cardapio[index].nome;
-                                  Size _size_nome = _textSize(_text_nome_item, _style_nome_item);
+                                      TextStyle _style_nome_item = TextStyle(color: corMarromSF, fontSize: (20), fontWeight: FontWeight.bold);
+                                      String _text_nome_item = controller_mobx.lista_itens_cardapio_mostrar[index].nome;
+                                      Size _size_nome = _textSize(_text_nome_item, _style_nome_item);
 
-                                  TextStyle _style_valor_item = TextStyle(color: Colors.white, fontSize: (20), fontWeight: FontWeight.bold);
-                                  String _text_valor_item = NumberFormat.simpleCurrency(locale: 'pt_BR').format(controller_mobx.lista_itens_cardapio[index].valor);
-                                  Size _size_valor = _textSize(_text_valor_item, _style_valor_item);
+                                      TextStyle _style_valor_item = TextStyle(color: Colors.white, fontSize: (20), fontWeight: FontWeight.bold);
+                                      String _text_valor_item = NumberFormat.simpleCurrency(locale: 'pt_BR').format(controller_mobx.lista_itens_cardapio_mostrar[index].valor);
+                                      Size _size_valor = _textSize(_text_valor_item, _style_valor_item);
 
-                                  return Container(
-                                    height: 100,
-                                    child: Card(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(25),
-                                        ),
-                                        elevation: 6,
-                                        shadowColor: corLaranjaSF,
-                                        margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                                        child: InkWell(
-                                          borderRadius: BorderRadius.circular(25),
-                                          splashColor: corLaranjaSF.withOpacity(0.20),
-                                          onTap: (){print(controller_mobx.lista_itens_cardapio[index].nome.toString());},
-                                          child: Row(
-                                            children: <Widget>[
-                                              Container(
-                                                  height: 100,
-                                                  width: largura,
-                                                  child: Stack(
-                                                    children: <Widget>[
-                                                      Padding(
-                                                        padding: EdgeInsets.all(8),
-                                                        child: Container(
-                                                          height: 64,
-                                                          width: 64,
-                                                          decoration: BoxDecoration(
-                                                            borderRadius: BorderRadius.circular(40),
-                                                            color: corMarromSF,
-                                                          ),
-                                                          child: Icon(
-                                                            Icons.restaurant, color: corLaranjaSF,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Align(
-                                                        alignment: Alignment.topLeft,
-                                                        child: Padding(
-                                                          padding: EdgeInsets.only(left: 80, right: 8, top:  8),
-                                                          child: AutoSizeText(
-                                                            _text_nome_item,
-                                                            textAlign: TextAlign.left,
-                                                            style: _style_nome_item,
-                                                            minFontSize: 14,
-                                                            maxLines: 1,
-                                                            overflow: TextOverflow.ellipsis,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Align(
-                                                        alignment: Alignment.topLeft,
-                                                        child: Padding(
-                                                          padding: EdgeInsets.fromLTRB(80, _size_nome.height + 14, _size_valor.width + 32, 2),
-                                                          child: AutoSizeText(
-                                                            controller_mobx.lista_itens_cardapio[index].desc_item,
-                                                            textAlign: TextAlign.justify,
-                                                            style: TextStyle(
-                                                              color: corLaranjaSF,
-                                                              fontSize: (12),
+                                      return Container(
+                                        height: 100,
+                                        child: Card(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(25),
+                                            ),
+                                            elevation: 6,
+                                            shadowColor: corLaranjaSF,
+                                            margin: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                                            child: InkWell(
+                                              borderRadius: BorderRadius.circular(25),
+                                              splashColor: corLaranjaSF.withOpacity(0.20),
+                                              onTap: (){
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => AdicionarItem(controller_mobx.lista_itens_cardapio_mostrar[index], controller_mobx.lista_adicionais_cardapio)
+                                                  )
+                                                );
+                                              },
+                                              child: Row(
+                                                children: <Widget>[
+                                                  Container(
+                                                      height: 100,
+                                                      width: largura,
+                                                      child: Stack(
+                                                        children: <Widget>[
+                                                          Padding(
+                                                            padding: EdgeInsets.all(8),
+                                                            child: Container(
+                                                              height: 64,
+                                                              width: 64,
+                                                              decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.circular(40),
+                                                                color: corMarromSF,
+                                                              ),
+                                                              child: Icon(
+                                                                Icons.restaurant, color: corLaranjaSF,
+                                                              ),
                                                             ),
-                                                            minFontSize: 12,
-                                                            maxLines: 3,
-                                                            overflow: TextOverflow.ellipsis,
                                                           ),
-                                                        ),
-                                                      ),
-                                                      Align(
-                                                          alignment: Alignment.bottomRight,
-                                                          child: Container(
-                                                            width: 100,
-                                                            decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-                                                              color: corMarromSF,
-                                                            ),
+                                                          Align(
+                                                            alignment: Alignment.topLeft,
                                                             child: Padding(
-                                                              padding: EdgeInsets.all(8),
+                                                              padding: EdgeInsets.only(left: 80, right: 8, top:  8),
                                                               child: AutoSizeText(
-                                                                NumberFormat.simpleCurrency(locale: 'pt_BR').format(controller_mobx.lista_itens_cardapio[index].valor),
+                                                                _text_nome_item,
                                                                 textAlign: TextAlign.left,
-                                                                style: TextStyle(
-                                                                    color: Colors.white,
-                                                                    fontSize: (20),
-                                                                    fontWeight: FontWeight.bold
-                                                                ),
+                                                                style: _style_nome_item,
                                                                 minFontSize: 14,
-                                                                maxLines: 2,
+                                                                maxLines: 1,
                                                                 overflow: TextOverflow.ellipsis,
                                                               ),
                                                             ),
-                                                          )
-                                                      ),
-                                                    ],
-                                                  )
+                                                          ),
+                                                          Align(
+                                                            alignment: Alignment.topLeft,
+                                                            child: Padding(
+                                                              padding: EdgeInsets.fromLTRB(80, _size_nome.height + 14, _size_valor.width + 32, 2),
+                                                              child: AutoSizeText(
+                                                                controller_mobx.lista_itens_cardapio_mostrar[index].desc_item,
+                                                                textAlign: TextAlign.justify,
+                                                                style: TextStyle(
+                                                                  color: corLaranjaSF,
+                                                                  fontSize: (12),
+                                                                ),
+                                                                minFontSize: 12,
+                                                                maxLines: 3,
+                                                                overflow: TextOverflow.ellipsis,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Align(
+                                                              alignment: Alignment.bottomRight,
+                                                              child: Container(
+                                                                width: 100,
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                                                                  color: corMarromSF,
+                                                                ),
+                                                                child: Padding(
+                                                                  padding: EdgeInsets.all(8),
+                                                                  child: AutoSizeText(
+                                                                    NumberFormat.simpleCurrency(locale: 'pt_BR').format(controller_mobx.lista_itens_cardapio_mostrar[index].valor),
+                                                                    textAlign: TextAlign.left,
+                                                                    style: TextStyle(
+                                                                        color: Colors.white,
+                                                                        fontSize: (20),
+                                                                        fontWeight: FontWeight.bold
+                                                                    ),
+                                                                    minFontSize: 14,
+                                                                    maxLines: 2,
+                                                                    overflow: TextOverflow.ellipsis,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                          ),
+                                                        ],
+                                                      )
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        )
-                                    ),
+                                            )
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
-                              ),
+                              )
                             )
                         )
                     ),
