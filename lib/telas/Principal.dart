@@ -57,7 +57,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> with TickerProviderStateM
     List<Widget> _widgetOptions = <Widget>[
       dados,
       cardapio,
-      pedido.build(context)
+      pedido
     ];
     
     return Scaffold(

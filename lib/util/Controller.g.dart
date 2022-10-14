@@ -425,6 +425,22 @@ mixin _$Controller on ControllerBase, Store {
     });
   }
 
+  late final _$lista_itens_pedidoAtom =
+      Atom(name: 'ControllerBase.lista_itens_pedido', context: context);
+
+  @override
+  List<ItemPedido> get lista_itens_pedido {
+    _$lista_itens_pedidoAtom.reportRead();
+    return super.lista_itens_pedido;
+  }
+
+  @override
+  set lista_itens_pedido(List<ItemPedido> value) {
+    _$lista_itens_pedidoAtom.reportWrite(value, super.lista_itens_pedido, () {
+      super.lista_itens_pedido = value;
+    });
+  }
+
   late final _$salvar_dados_clienteAsyncAction =
       AsyncAction('ControllerBase.salvar_dados_cliente', context: context);
 
@@ -553,6 +569,17 @@ mixin _$Controller on ControllerBase, Store {
   }
 
   @override
+  dynamic adiciona_item_ao_pedido(ItemPedido item_add) {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.adiciona_item_ao_pedido');
+    try {
+      return super.adiciona_item_ao_pedido(item_add);
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 escala_imagem_dados: ${escala_imagem_dados},
@@ -579,7 +606,8 @@ controller_size: ${controller_size},
 offsetAnimation_slide: ${offsetAnimation_slide},
 animation_size: ${animation_size},
 filtro_aplicado_valor: ${filtro_aplicado_valor},
-lista_itens_filtrada: ${lista_itens_filtrada}
+lista_itens_filtrada: ${lista_itens_filtrada},
+lista_itens_pedido: ${lista_itens_pedido}
     ''';
   }
 }

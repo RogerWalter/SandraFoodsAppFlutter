@@ -272,12 +272,19 @@ class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
                                               borderRadius: BorderRadius.circular(25),
                                               splashColor: corLaranjaSF.withOpacity(0.20),
                                               onTap: (){
-                                                Navigator.push(
+                                                showModalBottomSheet<void>(
+                                                  isScrollControlled: true,
+                                                  context: context,
+                                                  builder: (_) {
+                                                    return AdicionarItem(controller_mobx.lista_itens_cardapio_mostrar[index], controller_mobx.lista_adicionais_cardapio);
+                                                  },
+                                                );
+                                                /*Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) => AdicionarItem(controller_mobx.lista_itens_cardapio_mostrar[index], controller_mobx.lista_adicionais_cardapio)
                                                   )
-                                                );
+                                                );*/
                                               },
                                               child: Row(
                                                 children: <Widget>[
@@ -416,12 +423,4 @@ class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
       ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
   }
-}
-class MyCustomScrollBehavior extends MaterialScrollBehavior {
-  // Override behavior methods and getters like dragDevices
-  @override
-  Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-  };
 }

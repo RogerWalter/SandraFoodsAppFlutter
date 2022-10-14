@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:sandra_foods_app/abas/Cardapio.dart';
 import 'package:sandra_foods_app/model/Cliente.dart';
+import 'package:sandra_foods_app/model/ItemPedido.dart';
 import 'package:sandra_foods_app/telas/SemConexao.dart';
 
 import '../model/Filtro.dart';
@@ -244,5 +245,12 @@ abstract class ControllerBase with Store{
     filtro_aplicado_valor = Filtro();
   }
 
+  @observable
+  List<ItemPedido> lista_itens_pedido = [];
+
+  @action
+  adiciona_item_ao_pedido(ItemPedido item_add){
+    lista_itens_pedido.add(item_add);
+  }
 }
 
