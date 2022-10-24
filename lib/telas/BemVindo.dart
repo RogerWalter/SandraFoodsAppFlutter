@@ -56,6 +56,7 @@ class _BemVindoState extends State<BemVindo> with SingleTickerProviderStateMixin
   Curve curvaAplicada = Curves.slowMiddle;
   Curve curvaOpacidade = Curves.slowMiddle;
   String _frase_mostrar = "";
+  late String frase_gerada;
 
   @override
   void initState() {
@@ -64,7 +65,7 @@ class _BemVindoState extends State<BemVindo> with SingleTickerProviderStateMixin
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     _controllerAnimacao.forward();
     Frase frase = Frase();
-    Future<String> frase_gerada = frase.gerarFraseFirebase(widget.nome).then((frase_gerada) => mostrar_frase(frase_gerada));
+    frase.gerarFraseFirebase(widget.nome).then((frase_gerada) => mostrar_frase(frase_gerada));
   }
 
   @override

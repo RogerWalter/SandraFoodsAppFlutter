@@ -8,6 +8,8 @@ import 'package:sandra_foods_app/util/Controller.dart';
 import 'package:sandra_foods_app/util/Helper.dart';
 import 'package:provider/provider.dart';
 
+import '../util/Erro.dart';
+
 const corLaranjaSF = const Color(0xffff6900);
 const corMarromSF = const Color(0xff3d2314);
 const corComp1SF = const Color(0xffffaa00);
@@ -74,6 +76,7 @@ class _DadosState extends State<Dados> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    controller_mobx.escala_imagem_dados = 1.0;
   }
 
   @override
@@ -827,7 +830,21 @@ class _DadosState extends State<Dados> {
             resizeToAvoidBottomInset: false,
           );
         }else if(snapshot.hasError){
-          return Text('Erro');
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Dados', style: TextStyle(fontWeight: FontWeight.bold),),
+              backgroundColor: corLaranjaSF,
+              automaticallyImplyLeading: false,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(20),
+                ),
+              ),
+            ),
+            backgroundColor: Colors.transparent,
+            body: Erro(),
+            resizeToAvoidBottomInset: false,
+          );
         }else{
           return Scaffold(
             appBar: AppBar(

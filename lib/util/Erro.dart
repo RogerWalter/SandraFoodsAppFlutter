@@ -10,6 +10,26 @@ class Erro extends StatefulWidget {
 class _ErroState extends State<Erro> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    double altura = MediaQuery.of(context).size.height/5 - 16;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Center(
+            child: Container(
+                height: altura,
+                width: altura,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("images/tela_erro.png"),
+                        colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.50), BlendMode.modulate,),
+                        fit: BoxFit.cover
+                    )
+                ),
+                child: Text("")
+            )
+        )
+      ],
+    );
   }
 }

@@ -7,6 +7,7 @@ import 'package:sandra_foods_app/model/ItemCardapio.dart';
 import 'package:sandra_foods_app/model/ItemPedido.dart';
 
 import '../util/Controller.dart';
+import '../util/Erro.dart';
 
 class AdicionarItem extends StatefulWidget {
 
@@ -67,31 +68,31 @@ class _AdicionarItemState extends State<AdicionarItem> {
       future: waitLoadAdicionais(),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot){
         if(snapshot.hasData){
-          return Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('images/wallpaper_app.png'),
-                    colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.05), BlendMode.modulate,),
-                    fit: BoxFit.cover
-                )
-            ),
-            child: Scaffold(
-                backgroundColor: Colors.transparent,
-                appBar: AppBar(
-                  title: Text('Adicionar Item', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
-                  backgroundColor: corMarromSF,
-                  automaticallyImplyLeading: false,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(20),
-                    ),
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              AppBar(
+                title: Text('Adicionar Item', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                backgroundColor: corMarromSF,
+                automaticallyImplyLeading: false,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(20),
                   ),
                 ),
-                body: Padding(
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('images/wallpaper_app.png'),
+                        colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.05), BlendMode.modulate,),
+                        fit: BoxFit.cover
+                    )
+                ),
+                child: Padding(
                   padding: EdgeInsets.all(8),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -126,94 +127,94 @@ class _AdicionarItemState extends State<AdicionarItem> {
                         ),
                       ),
                       Visibility(
-                          visible: (adicionais_do_item.length > 0) ? true : false,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                            child: Container(
-                              width: largura,
-                              child: GridView.count(
-                                childAspectRatio: 1 / 0.2,
-                                shrinkWrap: true,
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 4,
-                                children: List.generate(adicionais_do_item.length, (index) {
-                                  return Card(
-                                      elevation: _indices_selecionados.contains(index) ? 0.5 : 4.0,
-                                      shape: RoundedRectangleBorder(
+                        visible: (adicionais_do_item.length > 0) ? true : false,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                          child: Container(
+                            width: largura,
+                            child: GridView.count(
+                              childAspectRatio: 1 / 0.2,
+                              shrinkWrap: true,
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 4,
+                              crossAxisSpacing: 4,
+                              children: List.generate(adicionais_do_item.length, (index) {
+                                return Card(
+                                    elevation: _indices_selecionados.contains(index) ? 0.5 : 4.0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: InkWell(
                                         borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: InkWell(
-                                          borderRadius: BorderRadius.circular(15),
-                                          splashColor: corLaranjaSF.withOpacity(0.20),
-                                          onTap: (){
-                                            setState(() {
-                                              if(_indices_selecionados.contains(index))//remover seleção
-                                                  {
-                                                _indices_selecionados.remove(index);
-                                                _selecionados.remove(adicionais_do_item[index]);
-                                                if(_selecionados.length > 0)
-                                                  _isEnabled = true;
-                                                else
-                                                  _isEnabled = false;
-                                              }
-                                              else //aplicar seleção
-                                                  {
-                                                _indices_selecionados.add(index);
-                                                _selecionados.add(adicionais_do_item[index]);
-                                                if(_selecionados.length > 0)
-                                                  _isEnabled = true;
-                                                else
-                                                  _isEnabled = false;
-                                              }
-                                              _valor_total_item = _calcula_valor_total_item();
-                                            });
-                                          },
-                                          child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(15),
-                                                color: _indices_selecionados.contains(index) ? corLaranjaSF.withOpacity(0.20) : Colors.transparent,
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.all(4),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      padding: EdgeInsets.only(right: 8),
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(15),
-                                                          color: _indices_selecionados.contains(index) ? corLaranjaSF : corMarromSF,
-                                                        ),
-                                                        child: _indices_selecionados.contains(index) ? Icon(Icons.check, color: Colors.white,) : Icon(Icons.add, color: Colors.white,),
+                                        splashColor: corLaranjaSF.withOpacity(0.20),
+                                        onTap: (){
+                                          setState(() {
+                                            if(_indices_selecionados.contains(index))//remover seleção
+                                                {
+                                              _indices_selecionados.remove(index);
+                                              _selecionados.remove(adicionais_do_item[index]);
+                                              if(_selecionados.length > 0)
+                                                _isEnabled = true;
+                                              else
+                                                _isEnabled = false;
+                                            }
+                                            else //aplicar seleção
+                                                {
+                                              _indices_selecionados.add(index);
+                                              _selecionados.add(adicionais_do_item[index]);
+                                              if(_selecionados.length > 0)
+                                                _isEnabled = true;
+                                              else
+                                                _isEnabled = false;
+                                            }
+                                            _valor_total_item = _calcula_valor_total_item();
+                                          });
+                                        },
+                                        child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15),
+                                              color: _indices_selecionados.contains(index) ? corLaranjaSF.withOpacity(0.20) : Colors.transparent,
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(4),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding: EdgeInsets.only(right: 8),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(15),
+                                                        color: _indices_selecionados.contains(index) ? corLaranjaSF : corMarromSF,
                                                       ),
+                                                      child: _indices_selecionados.contains(index) ? Icon(Icons.check, color: Colors.white,) : Icon(Icons.add, color: Colors.white,),
                                                     ),
-                                                    Expanded(
-                                                      child: AutoSizeText(
-                                                        adicionais_do_item[index].nome,
-                                                        //_listaItensMesa[index].desc_item,
-                                                        textAlign: TextAlign.left,
-                                                        style: TextStyle(
-                                                            color: corMarromSF,
-                                                            fontSize: (20),
-                                                            fontWeight: FontWeight.bold
-                                                        ),
-                                                        minFontSize: 10,
-                                                        maxLines: 1,
+                                                  ),
+                                                  Expanded(
+                                                    child: AutoSizeText(
+                                                      adicionais_do_item[index].nome,
+                                                      //_listaItensMesa[index].desc_item,
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          color: corMarromSF,
+                                                          fontSize: (20),
+                                                          fontWeight: FontWeight.bold
                                                       ),
-                                                    )
-                                                  ],
-                                                ),
-                                              )
-                                          )
-                                      )
-                                  );
-                                },),
-                              ),
+                                                      minFontSize: 10,
+                                                      maxLines: 1,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                        )
+                                    )
+                                );
+                              },),
                             ),
                           ),
+                        ),
                       ),
                       Padding(
                           padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
@@ -222,70 +223,70 @@ class _AdicionarItemState extends State<AdicionarItem> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Padding(
-                                padding: EdgeInsets.only(right: 8),
-                                child: AnimatedScale(
-                                  scale: _escala_bt_rem,
-                                  duration: Duration(milliseconds: 5),
-                                  curve: Curves.easeOutQuint,
-                                  child: Card(
-                                      elevation: 4,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: InkWell(
-                                        borderRadius: BorderRadius.circular(20),
-                                        splashColor: corLaranjaSF.withOpacity(0.20),
-                                        onTap: (){
-                                          setState(() {
-                                            _escala_bt_rem = 0.8;
-                                            if(_qtd_item > 1){
-                                              _qtd_item = _qtd_item - 1;
-                                            }
-                                            _valor_total_item = _calcula_valor_total_item();
-                                            Future.delayed(Duration(milliseconds: 5)).then((value) => setState(()
-                                            {
-                                              _escala_bt_rem = 1.0;
-                                            }));
-                                          });
-                                        },
-                                        child: Container(
-                                            height: 40,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(Radius.circular(20)),
-                                              color: corLaranjaSF,
-                                            ),
-                                            child: Icon(Icons.remove, color: Colors.white, size: 40,)
+                                  padding: EdgeInsets.only(right: 8),
+                                  child: AnimatedScale(
+                                    scale: _escala_bt_rem,
+                                    duration: Duration(milliseconds: 5),
+                                    curve: Curves.easeOutQuint,
+                                    child: Card(
+                                        elevation: 4,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
-                                      )
-                                  ),
-                                )
+                                        child: InkWell(
+                                          borderRadius: BorderRadius.circular(20),
+                                          splashColor: corLaranjaSF.withOpacity(0.20),
+                                          onTap: (){
+                                            setState(() {
+                                              _escala_bt_rem = 0.8;
+                                              if(_qtd_item > 1){
+                                                _qtd_item = _qtd_item - 1;
+                                              }
+                                              _valor_total_item = _calcula_valor_total_item();
+                                              Future.delayed(Duration(milliseconds: 5)).then((value) => setState(()
+                                              {
+                                                _escala_bt_rem = 1.0;
+                                              }));
+                                            });
+                                          },
+                                          child: Container(
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                color: corLaranjaSF,
+                                              ),
+                                              child: Icon(Icons.remove, color: Colors.white, size: 40,)
+                                          ),
+                                        )
+                                    ),
+                                  )
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 8, right: 8),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  elevation: 4.0,
-                                  child: Container(
-                                    decoration:  BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                      color: Colors.white,
+                                  padding: EdgeInsets.only(left: 8, right: 8),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 8, right: 8),
-                                      child: Text(
-                                        _qtd_item.toString(),
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: corLaranjaSF,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: (42),
+                                    elevation: 4.0,
+                                    child: Container(
+                                        decoration:  BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                                          color: Colors.white,
                                         ),
-                                      ),
-                                    )
-                                  ),
-                                )
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 8, right: 8),
+                                          child: Text(
+                                            _qtd_item.toString(),
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: corLaranjaSF,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: (42),
+                                            ),
+                                          ),
+                                        )
+                                    ),
+                                  )
                               ),
                               Padding(
                                   padding: EdgeInsets.only(left: 8),
@@ -330,25 +331,25 @@ class _AdicionarItemState extends State<AdicionarItem> {
                           )
                       ),
                       Padding(
-                          padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                          child: Container(
-                            child: TextField(
-                              maxLines: 3,
-                              minLines: 1,
-                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[a-zA-Z -]"))],
-                              controller: _controller_obs,
-                              focusNode: _foco_obs,
-                              keyboardType: TextInputType.name,
-                              textCapitalization: TextCapitalization.sentences,
-                              textInputAction: TextInputAction.done,
-                              maxLength: 100,
-                              cursorColor: corLaranjaSF,
-                              style: TextStyle(
-                                  color: corMarromSF,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                              ),
-                              decoration: InputDecoration(
+                        padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                        child: Container(
+                          child: TextField(
+                            maxLines: 3,
+                            minLines: 1,
+                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[a-zA-Z -]"))],
+                            controller: _controller_obs,
+                            focusNode: _foco_obs,
+                            keyboardType: TextInputType.name,
+                            textCapitalization: TextCapitalization.sentences,
+                            textInputAction: TextInputAction.done,
+                            maxLength: 100,
+                            cursorColor: corLaranjaSF,
+                            style: TextStyle(
+                              color: corMarromSF,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            decoration: InputDecoration(
                                 floatingLabelBehavior: FloatingLabelBehavior.always,
                                 counterText: "",
                                 contentPadding: EdgeInsets.only(top: 12, bottom: 12),
@@ -368,9 +369,9 @@ class _AdicionarItemState extends State<AdicionarItem> {
                                 ),
                                 prefixIcon: Icon(Icons.info, color:corLaranjaSF),
                                 suffixIcon: Icon(Icons.info, color:corLaranjaSF)
-                              ),
                             ),
                           ),
+                        ),
                       ),
                       Padding(
                           padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
@@ -394,8 +395,8 @@ class _AdicionarItemState extends State<AdicionarItem> {
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(15),
                                                 border: Border.all(
-                                                    width: 1.0,
-                                                    color: corMarromSF,
+                                                  width: 1.0,
+                                                  color: corMarromSF,
                                                 ),
                                                 color: Colors.transparent,
                                               ),
@@ -461,7 +462,7 @@ class _AdicionarItemState extends State<AdicionarItem> {
                                             salvar_item();
                                           },
                                           child: Container(
-                                            height: 40,
+                                              height: 40,
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(15),
                                                 color: Colors.transparent,
@@ -502,39 +503,44 @@ class _AdicionarItemState extends State<AdicionarItem> {
                       ),
                     ],
                   ),
-                )
-            )
+                ),
+              )
+            ],
           );
         }
         else if(snapshot.hasError){
-          return Text('Erro');
+          return Erro();
         }else{
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Cardápio', style: TextStyle(fontWeight: FontWeight.bold),),
-              backgroundColor: corLaranjaSF,
-              automaticallyImplyLeading: false,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(20),
+          return Container(
+            height: 600,
+            width: double.infinity,
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text('Cardápio', style: TextStyle(fontWeight: FontWeight.bold),),
+                backgroundColor: corLaranjaSF,
+                automaticallyImplyLeading: false,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(20),
+                  ),
                 ),
               ),
-            ),
-            backgroundColor: Colors.transparent,
-            body: Center(
-              child: Container(
-                  alignment: FractionalOffset.center,
-                  color: Colors.transparent,
-                  height: altura,
-                  width: altura,
-                  padding: const EdgeInsets.all(20.0),
-                  child:  new Image.asset(
-                    'images/loading_gif.gif',
-                    fit: BoxFit.cover,
-                  )
+              backgroundColor: Colors.transparent,
+              body: Center(
+                child: Container(
+                    alignment: FractionalOffset.center,
+                    color: Colors.transparent,
+                    height: altura,
+                    width: altura,
+                    padding: const EdgeInsets.all(20.0),
+                    child:  new Image.asset(
+                      'images/loading_gif.gif',
+                      fit: BoxFit.cover,
+                    )
+                ),
               ),
+              resizeToAvoidBottomInset: false,
             ),
-            resizeToAvoidBottomInset: false,
           );
         }
       }
@@ -604,15 +610,57 @@ class _AdicionarItemState extends State<AdicionarItem> {
     ItemPedido item_add = ItemPedido();
     item_add.id_item = controller_mobx.lista_itens_pedido.length + 1;
     item_add.id_pedido = "-";
-    item_add.desc_item = widget.item_add.nome;
+    item_add.nome_item = widget.item_add.nome;
+    item_add.desc_item = widget.item_add.desc_item;
     for(int i=0; i < _selecionados.length; i++){
-      item_add.adicionais_item.add(_selecionados[i]);
+      if(i>0)
+        item_add.adicionais_item.add(_selecionados[i]);
     }
     item_add.obs_item = _controller_obs.text;
     item_add.valor_item = _calcula_valor_total_item();
     item_add.qtd_item = _qtd_item;
     item_add.grupo_item = widget.item_add.grupo;
-    controller_mobx.adiciona_item_ao_pedido(item_add);
+    item_add.tipo_item = widget.item_add.tipo;
+
+    if(controller_mobx.lista_itens_pedido.length > 0){
+      int indice_encontrado = -1;
+      for(int i = 0; i < controller_mobx.lista_itens_pedido.length; i++){
+        if(controller_mobx.lista_itens_pedido[i].nome_item == item_add.nome_item &&
+          controller_mobx.lista_itens_pedido[i].obs_item == item_add.obs_item){
+          if(controller_mobx.lista_itens_pedido[i].adicionais_item.length != item_add.adicionais_item.length){
+            indice_encontrado = -1;
+          }
+          else{
+            int qtd_adicionais = 0;
+            for(int j = 0; j < controller_mobx.lista_itens_pedido[i].adicionais_item.length; j++){
+              for(int k = 0; k < item_add.adicionais_item.length; k++){
+                if(controller_mobx.lista_itens_pedido[i].adicionais_item[j].nome == item_add.adicionais_item[k].nome){
+                  qtd_adicionais++;
+                }
+              }
+            }
+            if(qtd_adicionais == controller_mobx.lista_itens_pedido[i].adicionais_item.length){
+              indice_encontrado = i;
+              break;
+            }
+          }
+        }
+      }
+      if(indice_encontrado != -1){
+        ItemPedido item_encontrado_lista = controller_mobx.lista_itens_pedido[indice_encontrado];
+        num novo_valor = item_encontrado_lista.valor_item + item_add.valor_item;
+        int nova_qtd = item_encontrado_lista.qtd_item + item_add.qtd_item;
+        item_encontrado_lista.valor_item = novo_valor;
+        item_encontrado_lista.qtd_item = nova_qtd;
+        controller_mobx.atualizar_item_do_pedido(item_encontrado_lista, indice_encontrado);
+      }
+      else{
+        controller_mobx.adiciona_item_ao_pedido(item_add);
+      }
+    }
+    else{
+      controller_mobx.adiciona_item_ao_pedido(item_add);
+    }
     Navigator.of(context).pop();
   }
 }

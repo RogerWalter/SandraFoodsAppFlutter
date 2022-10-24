@@ -246,11 +246,40 @@ abstract class ControllerBase with Store{
   }
 
   @observable
-  List<ItemPedido> lista_itens_pedido = [];
+  var lista_itens_pedido = ObservableList<ItemPedido>();
 
   @action
   adiciona_item_ao_pedido(ItemPedido item_add){
     lista_itens_pedido.add(item_add);
   }
+
+  @action
+  atualizar_item_do_pedido(ItemPedido item_upd, int indice){
+    lista_itens_pedido[indice] = item_upd;
+  }
+
+  @action
+  remover_item_do_pedido(int indice){
+    lista_itens_pedido.removeAt(indice);
+  }
+
+  @action
+  limpar_pedido(){
+    lista_itens_pedido.clear();
+  }
+
+  @observable
+  num total_pedido = 0;
+
+  @action
+  calcular_total_pedido(){
+    num _valor_total = 0;
+    for(ItemPedido it in lista_itens_pedido)
+    {
+      _valor_total = _valor_total + it.valor_item;
+    }
+    total_pedido = _valor_total;
+  }
+
 }
 

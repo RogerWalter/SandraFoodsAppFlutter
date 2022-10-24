@@ -429,15 +429,31 @@ mixin _$Controller on ControllerBase, Store {
       Atom(name: 'ControllerBase.lista_itens_pedido', context: context);
 
   @override
-  List<ItemPedido> get lista_itens_pedido {
+  ObservableList<ItemPedido> get lista_itens_pedido {
     _$lista_itens_pedidoAtom.reportRead();
     return super.lista_itens_pedido;
   }
 
   @override
-  set lista_itens_pedido(List<ItemPedido> value) {
+  set lista_itens_pedido(ObservableList<ItemPedido> value) {
     _$lista_itens_pedidoAtom.reportWrite(value, super.lista_itens_pedido, () {
       super.lista_itens_pedido = value;
+    });
+  }
+
+  late final _$total_pedidoAtom =
+      Atom(name: 'ControllerBase.total_pedido', context: context);
+
+  @override
+  num get total_pedido {
+    _$total_pedidoAtom.reportRead();
+    return super.total_pedido;
+  }
+
+  @override
+  set total_pedido(num value) {
+    _$total_pedidoAtom.reportWrite(value, super.total_pedido, () {
+      super.total_pedido = value;
     });
   }
 
@@ -580,6 +596,50 @@ mixin _$Controller on ControllerBase, Store {
   }
 
   @override
+  dynamic atualizar_item_do_pedido(ItemPedido item_upd, int indice) {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.atualizar_item_do_pedido');
+    try {
+      return super.atualizar_item_do_pedido(item_upd, indice);
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic remover_item_do_pedido(int indice) {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.remover_item_do_pedido');
+    try {
+      return super.remover_item_do_pedido(indice);
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic limpar_pedido() {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.limpar_pedido');
+    try {
+      return super.limpar_pedido();
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic calcular_total_pedido() {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.calcular_total_pedido');
+    try {
+      return super.calcular_total_pedido();
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 escala_imagem_dados: ${escala_imagem_dados},
@@ -607,7 +667,8 @@ offsetAnimation_slide: ${offsetAnimation_slide},
 animation_size: ${animation_size},
 filtro_aplicado_valor: ${filtro_aplicado_valor},
 lista_itens_filtrada: ${lista_itens_filtrada},
-lista_itens_pedido: ${lista_itens_pedido}
+lista_itens_pedido: ${lista_itens_pedido},
+total_pedido: ${total_pedido}
     ''';
   }
 }

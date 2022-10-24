@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,6 +12,7 @@ import 'dart:ui' as ui;
 import '../model/Filtro.dart';
 import '../telas/AdicionarItem.dart';
 import '../util/Controller.dart';
+import '../util/Erro.dart';
 
 
 class Cardapio extends StatefulWidget {
@@ -272,11 +273,27 @@ class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
                                               borderRadius: BorderRadius.circular(25),
                                               splashColor: corLaranjaSF.withOpacity(0.20),
                                               onTap: (){
+                                                /*showAnimatedDialog(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder: (context) {
+                                                    return Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: <Widget>[
+                                                        AdicionarItem(controller_mobx.lista_itens_cardapio_mostrar[index], controller_mobx.lista_adicionais_cardapio)
+                                                      ],
+                                                    );
+                                                  },
+                                                  animationType: DialogTransitionType.fadeScale,
+                                                  curve: Curves.easeInOutQuint,
+                                                  duration: Duration(milliseconds: 500),
+                                                );*/
                                                 showModalBottomSheet<void>(
                                                   isScrollControlled: true,
                                                   context: context,
                                                   builder: (_) {
-                                                    return AdicionarItem(controller_mobx.lista_itens_cardapio_mostrar[index], controller_mobx.lista_adicionais_cardapio);
+                                                    return Wrap(children: <Widget>[ AdicionarItem(controller_mobx.lista_itens_cardapio_mostrar[index], controller_mobx.lista_adicionais_cardapio)],);
+                                                    //return AdicionarItem(controller_mobx.lista_itens_cardapio_mostrar[index], controller_mobx.lista_adicionais_cardapio);
                                                   },
                                                 );
                                                 /*Navigator.push(
@@ -384,7 +401,21 @@ class _CardapioState extends State<Cardapio> with TickerProviderStateMixin{
               )
             );
           }else if(snapshot.hasError){
-            return Text('Erro');
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Dados', style: TextStyle(fontWeight: FontWeight.bold),),
+                backgroundColor: corLaranjaSF,
+                automaticallyImplyLeading: false,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(20),
+                  ),
+                ),
+              ),
+              backgroundColor: Colors.transparent,
+              body: Erro(),
+              resizeToAvoidBottomInset: false,
+            );
           }else{
             return Scaffold(
               appBar: AppBar(
